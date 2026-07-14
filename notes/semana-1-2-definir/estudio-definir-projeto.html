@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Estúdio da Fase Definir — Interrogatório do seu projeto</title>
+<style>
+  :root{
+    --bg:#0f1420; --bg2:#151b2b; --panel:#1a2233; --panel2:#212b40;
+    --ink:#e9edf6; --muted:#9aa7bd; --line:#2a3550;
+    --accent:#f5b62f; --accent2:#ffd36b; --accentink:#0f1420;
+    --blue:#5aa0ff; --green:#4bd08b; --red:#ff6b6b; --purple:#b98bff;
+    --radius:14px; --shadow:0 10px 30px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:radial-gradient(1200px 700px at 80% -10%, #1c2540 0, transparent 60%), var(--bg);
+    background-color:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55; -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent2)}
+  .wrap{max-width:1180px;margin:0 auto;padding:22px 20px 80px}
+  header.hero{
+    display:flex;flex-wrap:wrap;gap:18px;align-items:flex-end;justify-content:space-between;
+    border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:22px;
+  }
+  .brand{display:flex;flex-direction:column;gap:6px}
+  .kicker{color:var(--accent);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px}
+  h1{font-size:30px;margin:0;line-height:1.15}
+  .sub{color:var(--muted);font-size:15px;max-width:640px}
+  .tese{
+    background:linear-gradient(180deg,var(--panel),var(--bg2));
+    border:1px solid var(--line);border-left:4px solid var(--accent);
+    border-radius:var(--radius);padding:14px 16px;margin:0 0 22px;color:#dfe6f4;font-size:14.5px
+  }
+  .tese b{color:var(--accent2)}
+  .layout{display:grid;grid-template-columns:250px 1fr;gap:26px;align-items:start}
+  /* NAV */
+  nav.side{position:sticky;top:14px;display:flex;flex-direction:column;gap:8px}
+  .progresswrap{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}
+  .progresswrap .lab{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:8px}
+  .bar{height:8px;background:#0b0f18;border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .3s}
+  .navlist{display:flex;flex-direction:column;gap:4px;margin-top:4px}
+  .navitem{
+    display:flex;gap:10px;align-items:center;padding:9px 10px;border-radius:10px;cursor:pointer;
+    border:1px solid transparent;color:var(--muted);font-size:13.5px;transition:.15s
+  }
+  .navitem:hover{background:var(--panel);color:var(--ink)}
+  .navitem.active{background:var(--panel2);border-color:var(--line);color:var(--ink)}
+  .navitem .dot{width:20px;height:20px;border-radius:99px;border:2px solid var(--line);flex:none;display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--muted)}
+  .navitem.active .dot{border-color:var(--accent)}
+  .navitem[data-complete="full"] .dot{background:var(--green);border-color:var(--green);color:#062616}
+  .navitem[data-complete="part"] .dot{border-color:var(--accent);color:var(--accent)}
+  .navnum{font-variant-numeric:tabular-nums}
+  /* MAIN */
+  main{min-width:0}
+  .station{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:24px 24px 8px}
+  .st-head{display:flex;gap:14px;align-items:flex-start;margin-bottom:6px}
+  .st-badge{flex:none;width:46px;height:46px;border-radius:12px;background:var(--accent);color:var(--accentink);font-weight:800;font-size:19px;display:grid;place-items:center;box-shadow:0 6px 18px rgba(245,182,47,.3)}
+  .st-title{font-size:22px;margin:0}
+  .st-sub{color:var(--muted);font-size:14px;margin-top:2px}
+  .concept{
+    margin:16px 0 6px;background:#13192a;border:1px solid var(--line);border-left:4px solid var(--blue);
+    border-radius:12px;padding:14px 16px
+  }
+  .concept .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-bottom:6px}
+  .concept p{margin:.35em 0;font-size:14px;color:#dbe3f2}
+  .concept .quote{color:var(--accent2);font-style:italic;border-top:1px dashed var(--line);margin-top:10px;padding-top:8px;font-size:13.5px}
+  .concept .src{color:var(--muted);font-size:12px}
+  .field{margin:18px 0}
+  .field > label{display:block;font-weight:650;margin-bottom:6px;font-size:15px}
+  .field .hint{color:var(--muted);font-size:12.5px;margin:-2px 0 8px}
+  textarea,input[type=text]{
+    width:100%;background:#0d1220;border:1px solid var(--line);color:var(--ink);border-radius:10px;
+    padding:11px 12px;font:inherit;font-size:14px;resize:vertical
+  }
+  textarea{min-height:84px}
+  textarea:focus,input:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,182,47,.14)}
+  select{background:#0d1220;border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:9px 10px;font:inherit;font-size:13.5px}
+  .pressure{margin:18px 0;background:linear-gradient(180deg,#2a1414,#1c1414);border:1px solid #52272a;border-left:4px solid var(--red);border-radius:12px;padding:14px 16px}
+  .pressure .tag{display:inline-flex;gap:6px;align-items:center;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#ff9a9a;margin-bottom:8px}
+  .pressure ul{margin:6px 0 10px;padding-left:18px}
+  .pressure li{margin:6px 0;font-size:14px;color:#ffdede}
+  /* JTBD builder */
+  .jtbd-entry,.rep-entry{background:#0d1220;border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}
+  .jtbd-row{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;margin:7px 0}
+  .jtbd-row .key{color:var(--accent2);font-size:13px;font-weight:700;text-align:right}
+  .jtbd-preview{margin-top:8px;padding:10px 12px;background:#101a13;border:1px solid #23402c;border-radius:10px;color:#d6f5e2;font-size:14px}
+  .jtbd-preview b{color:var(--green)}
+  .rep-entry .rep-top{display:flex;gap:10px;align-items:center}
+  .rep-entry .rep-top input{flex:1}
+  .badge{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;border-radius:99px}
+  .b-basico{background:rgba(255,107,107,.16);color:#ff9a9a;border:1px solid #52272a}
+  .b-performance{background:rgba(90,160,255,.16);color:#9cc4ff;border:1px solid #274066}
+  .b-delighter{background:rgba(75,208,139,.16);color:#8ef0bb;border:1px solid #235238}
+  .b-unica{background:rgba(255,107,107,.16);color:#ff9a9a;border:1px solid #52272a}
+  .b-dupla{background:rgba(75,208,139,.16);color:#8ef0bb;border:1px solid #235238}
+  .btn{cursor:pointer;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--ink);padding:9px 14px;font:inherit;font-size:13.5px;font-weight:600;transition:.15s}
+  .btn:hover{border-color:var(--accent);color:var(--accent2)}
+  .btn.primary{background:var(--accent);color:var(--accentink);border-color:var(--accent)}
+  .btn.primary:hover{background:var(--accent2);color:var(--accentink)}
+  .btn.ghost{background:transparent}
+  .btn.mini{padding:5px 10px;font-size:12px}
+  .btn.danger:hover{border-color:var(--red);color:var(--red)}
+  .rep-add{margin-top:2px}
+  .row-actions{display:flex;justify-content:flex-end;margin-top:6px}
+  .footnav{display:flex;justify-content:space-between;gap:12px;margin:22px 0 4px;padding-top:16px;border-top:1px solid var(--line)}
+  .toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .save-note{color:var(--muted);font-size:12px;margin-top:10px;display:flex;align-items:center;gap:7px}
+  .save-dot{width:8px;height:8px;border-radius:99px;background:var(--green)}
+  .checklist{list-style:none;padding:0;margin:8px 0}
+  .checklist li{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px dashed var(--line);font-size:14px}
+  .checklist input{margin-top:3px}
+  .pill{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:99px;padding:3px 10px;font-size:12px;color:var(--muted);margin:2px 4px 2px 0}
+  .muted{color:var(--muted)}
+  .hidden{display:none!important}
+  #printArea{display:none}
+  @media (max-width:880px){
+    .layout{grid-template-columns:1fr}
+    nav.side{position:static}
+    .navlist{flex-direction:row;flex-wrap:wrap}
+    .navitem{font-size:12px}
+    .jtbd-row{grid-template-columns:1fr}
+    .jtbd-row .key{text-align:left}
+  }
+  @media print{
+    body{background:#fff;color:#111}
+    .app{display:none!important}
+    #printArea{display:block!important;padding:24px}
+    #printArea h2{border-bottom:1px solid #ccc;padding-bottom:4px;margin-top:26px}
+    #printArea .q{font-weight:700;margin-top:12px}
+    #printArea .a{white-space:pre-wrap;margin:2px 0 8px;color:#222}
+  }
+</style>
+</head>
+<body>
+<div class="app wrap">
+  <header class="hero">
+    <div class="brand">
+      <span class="kicker">Product Engineer · Semana 1–2 · Fase Definir</span>
+      <h1>Estúdio de Definição do Projeto</h1>
+      <div class="sub">Um interrogatório guiado do seu projeto — <b>analytics de conversas de uma plataforma de IA B2B (em reestruturação)</b> — aplicando o método das Aulas 1 e 2. Ele te força a explicar, te cobra como numa office hour, e monta o material que você leva pra call com o professor.</div>
+    </div>
+    <div style="text-align:right">
+      <button class="btn primary" id="btnExportMd">⬇︎ Exportar Markdown</button>
+      <div class="save-note" style="justify-content:flex-end"><span class="save-dot" id="saveDot"></span><span id="saveMsg">Salvo automaticamente no navegador</span></div>
+    </div>
+  </header>
+
+  <div class="tese">
+    <b>A tese central:</b> “Quando construir se torna abundante, julgar se torna cada vez mais escasso e cada vez mais específico.” O gargalo não é mais produzir o analytics — é <b>o julgamento</b> de o que reestruturar, para quem e por quê. Product Engineer = <b>dono da ideia ao impacto</b>. E “julgamento não é dom, é método”: é percorrer as perguntas abaixo.
+  </div>
+
+  <div class="layout">
+    <nav class="side">
+      <div class="progresswrap">
+        <div class="lab"><span>Progresso</span><span id="pctText">0%</span></div>
+        <div class="bar"><i id="barFill"></i></div>
+      </div>
+      <div class="navlist" id="navlist"></div>
+    </nav>
+
+    <main>
+      <div id="stationHost"></div>
+      <div class="footnav">
+        <button class="btn ghost" id="btnPrev">← Anterior</button>
+        <button class="btn primary" id="btnNext">Próxima estação →</button>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div id="printArea"></div>
+
+<script>
+"use strict";
+
+/* ---------------------------------------------------------------
+   CONTEÚDO — baseado nas notas MasterClass Product Engineer (Aula 1 e 2)
+--------------------------------------------------------------- */
+var STATIONS = [
+  {
+    id:"contexto",
+    nav:"Contexto & aposta",
+    badge:"0",
+    title:"Contexto & aposta",
+    sub:"Antes de julgar, deixe o projeto explícito. Você é o dono da ideia ao impacto.",
+    concept:{
+      tag:"Aula 1 · Julgar > Construir",
+      html:"<p>O curso não te ensina a decisão ótima em abstrato, e sim a <b>melhor decisão possível a partir da informação que você tem em mãos</b>. O Product Engineer assume o ciclo inteiro — do “porquê” ao impacto — em vez de só ter a ideia, só construir ou só medir.</p><p>Cuidado com a métrica errada: no “baseball card” da AWS, “subi X deploys” virou nota de rodapé. Volume de output (features entregues, dashboards) <b>não</b> diz qual experiência mudou nem qual foi o impacto real.</p>",
+      quote:"“A pessoa mais perigosa numa sala é alguém que tem a ideia, coloca em prática, e avalia o impacto.”",
+      src:"Aula 1 — Fase Define"
+    },
+    fields:[
+      {id:"pitch",type:"textarea",label:"Descreva seu projeto em 1 frase (sem jargão).",hint:"Alguém que não entende do negócio precisa entender. Ex.: “analytics que ajuda [quem] a [progresso] a partir das conversas com a IA”.",value:"Analytics de conversas de uma plataforma de IA B2B — o produto já existe e está em fase de reestruturação."},
+      {id:"dono",type:"textarea",label:"Você consegue percorrer da IDEIA ao IMPACTO neste projeto? Onde você depende de outros?",hint:"Seja honesto sobre onde o ciclo quebra hoje (quem define, quem constrói, quem mede)."},
+      {id:"porque_agora",type:"textarea",label:"Por que reestruturar AGORA? O que mudou / o que está doendo?",hint:"Isso vira o coração da narrativa depois. Fuja de “o código está velho”; vá ao problema de negócio/usuário."},
+      {id:"impacto_real",type:"textarea",label:"Qual é o IMPACTO REAL que a reestruturação deve mover — não o output?",hint:"Não “entregar novo dashboard”. Qual decisão/experiência/número muda para quem usa? Como você saberá?"}
+    ],
+    pressure:{
+      id:"p_contexto",
+      questions:[
+        "Se eu te perguntar “qual experiência isso muda e qual o impacto real?”, você responde com impacto ou só com output (telas, features entregues)?",
+        "Você está reestruturando por um problema real do usuário/negócio — ou porque o produto ficou feio de manter por dentro?"
+      ]
+    }
+  },
+
+  {
+    id:"problema",
+    nav:"1. O problema existe?",
+    badge:"1",
+    title:"O problema existe de fato?",
+    sub:"Pergunta 1 das 5. Clientes descrevem soluções — não problemas.",
+    concept:{
+      tag:"Aula 2 · Descoberta do problema",
+      html:"<p>Case Palantir/FDE: um cliente entregou <b>47 páginas de requisitos</b> e 4 meses de escopo. O Forward Deployed Engineer perguntou “<b>o que você faz primeiro, segunda de manhã?</b>”. Resposta: “vejo se tem caminhão atrasado e ligo pro estoque.” Ele entregou <b>um alerta no Slack</b> — não o sistema inteiro.</p><p>The Mom Test: em vez de “você usaria isso?”, pergunte “<b>me conta a última vez que esse problema aconteceu</b>”. E quantifique a dor: no case DocuSign, o cliente “achava” gastar R$0,5M/mês; ao recalcular, eram US$40M/ano.</p>",
+      quote:"“O que a pessoa precisa não é necessariamente o que o cliente vai te dizer. Clientes descrevem soluções, não problemas.”",
+      src:"Aula 2 — Palantir/FDE, The Mom Test, DocuSign"
+    },
+    fields:[
+      {id:"quem",type:"textarea",label:"Quem EXATAMENTE usa esse analytics? (cargo, time, contexto — nada de “os usuários”)",hint:"Ex.: CS ops do cliente B2B? PM do cliente? Time interno? Cada um tem um problema diferente."},
+      {id:"segunda_manha",type:"textarea",label:"O que essa pessoa faz na SEGUNDA DE MANHÃ, hoje, com (ou sem) o analytics?",hint:"A pergunta do FDE. Descreva o ritual real: o que ela abre, o que procura, pra quem liga."},
+      {id:"ultima_vez",type:"textarea",label:"“Me conta a última vez que esse problema aconteceu.” Descreva um episódio real e concreto.",hint:"Um caso específico, com data/situação — não uma generalização. (The Mom Test)"},
+      {id:"custo_dor",type:"textarea",label:"Quanto custa esse problema hoje? Quantifique (tempo, R$, decisões erradas, churn).",hint:"Se você não sabe medir, esse já é um sinal. Faça a conta como no DocuSign."},
+      {id:"pedido_vs_problema",type:"textarea",label:"Qual é o PEDIDO que te fazem vs. o PROBLEMA real por trás?",hint:"Ex.: pedem “mais um gráfico / export em CSV”. O problema pode ser “não confio no número pra decidir X”."}
+    ],
+    pressure:{
+      id:"p_problema",
+      questions:[
+        "Se você entregasse só “o alerta no Slack” do seu caso (o sinal exato que a pessoa precisa segunda de manhã), resolveria 80% da dor? Se sim, por que reconstruir o analytics inteiro?",
+        "Onde está o dado que prova o problema? Ou você está inferindo a partir do que é chato de manter no código?"
+      ]
+    }
+  },
+
+  {
+    id:"jtbd",
+    nav:"2. Jobs to be Done",
+    badge:"2",
+    title:"Jobs to be Done",
+    sub:"Pergunta 2 das 5. Que progresso a pessoa contrata seu produto para fazer?",
+    concept:{
+      tag:"Aula 2 · Competing Against Luck",
+      html:"<p>Em vez de ouvir o que a pessoa <i>quer que você faça</i>, entenda o que ela <b>faz todo dia</b>. O JTBD descreve um <b>progresso</b>, não uma feature. Depois de mapear, valide direto: “se eu fizesse isso, quanto resolveria seu problema?”</p><p>Estrutura: <b>Quando</b> [situação/gatilho], <b>me ajude a</b> [progresso], <b>para que eu</b> [resultado], <b>sem</b> [obstáculo].</p>",
+      quote:"“Quando começa segunda de manhã, me ajuda a saber se tem caminhão atrasado, para que eu reponha o estoque a tempo, sem varrer relatório.”",
+      src:"Aula 2 — JTBD / Clayton Christensen"
+    },
+    fields:[
+      {id:"jtbd_list",type:"jtbd",label:"Monte 1 a 3 JTBDs dos usuários do seu analytics.",hint:"Fuja de solução disfarçada (“ver o dashboard” não é um job). Descreva o progresso real."},
+      {id:"validacao",type:"textarea",label:"Como você vai validar esses JTBDs com um usuário real? Escreva a pergunta que fará.",hint:"Ex.: “se eu te avisasse automaticamente quando X, quanto resolveria seu problema?”"}
+    ],
+    pressure:{
+      id:"p_jtbd",
+      questions:[
+        "Leia seu JTBD em voz alta: ele descreve um progresso do usuário ou uma tela do seu produto? Se citou solução, reescreva.",
+        "Qual desses jobs, se resolvido, faria a pessoa VOLTAR toda semana? Esse é o que importa."
+      ]
+    }
+  },
+
+  {
+    id:"kano",
+    nav:"3. Que valor cria? (Kano)",
+    badge:"3",
+    title:"Que tipo de valor isso cria?",
+    sub:"Pergunta 3 das 5. Nem toda funcionalidade cria valor da mesma forma.",
+    concept:{
+      tag:"Aula 2 · Modelo de Kano (1984)",
+      html:"<p>Três curvas de satisfação: <b>Básico (must-be)</b> — ninguém elogia, mas a ausência gera forte insatisfação (ex.: não receber confirmação de uma transferência no Zelle/Pix). <b>Performance</b> — quanto melhor, mais satisfação, linear (ex.: precisão da promessa de entrega na Amazon). <b>Delighter</b> — ninguém espera, e quando vem gera valor altíssimo.</p><p>Atenção: <b>a barra do “básico” sobe com o tempo e a concorrência</b>. Quando o iFood surgiu a expectativa era baixa; com um concorrente forte, o “básico” já exigia muito mais só para entrar no jogo.</p>",
+      quote:"“Se o básico falha, nenhum delighter salva.”",
+      src:"Aula 2 — Modelo de Kano"
+    },
+    fields:[
+      {id:"kano_list",type:"kano",label:"Liste capacidades do analytics reestruturado e classifique cada uma.",hint:"Seja honesto: o que é must-be, o que é performance, o que é delighter?"},
+      {id:"kano_zelle",type:"textarea",label:"Qual é o “must-be” do SEU analytics que, se faltar, gera forte insatisfação (seu “Zelle sem confirmação”)?",hint:"Ex.: confiar no número, não perder conversas, latência do dado, privacidade."},
+      {id:"kano_barra",type:"textarea",label:"A barra do “básico” subiu desde que o analytics foi criado? O que virou obrigatório e antes era diferencial?",hint:"Isso costuma explicar POR QUE reestruturar agora."}
+    ],
+    pressure:{
+      id:"p_kano",
+      questions:[
+        "Quantos itens da sua lista são delighters que ninguém pediu vs. must-be que você ainda não entrega bem?",
+        "Você está reestruturando para subir performance/delighter enquanto um must-be continua quebrado?"
+      ]
+    }
+  },
+
+  {
+    id:"vale",
+    nav:"4. Vale a pena? (prioridade)",
+    badge:"4",
+    title:"Vale a pena construir? Priorização",
+    sub:"Pergunta 4 das 5. Mastro do circo + portas de mão única/dupla.",
+    concept:{
+      tag:"Aula 2 · Priorização & tipo de decisão",
+      html:"<p><b>Mastro do circo:</b> o primeiro mastro trava tudo — sem ele não há pipoca nem picadeiro. Identifique a solução <b>não-paralelizável</b> que destrava o resto, mesmo que não seja a tarefa “sexy”, e faça-a primeiro.</p><p><b>Portas:</b> decisão de <b>mão dupla</b> é reversível barato — não burocratize. Decisão de <b>mão única</b> (custo de reverter altíssimo) pede mais tempo e alinhamento. Erro comum: tratar uma como a outra.</p><p>E lembre: <b>5 a 7 usuários</b> já rendem ~50–95% do aprendizado. Se você ainda falou com 0, esse é o seu mastro.</p>",
+      quote:"“Julgamento não é dom, é método.”",
+      src:"Aula 2 — Mastro do circo · One/two-way door · Retornos decrescentes"
+    },
+    fields:[
+      {id:"mastro",type:"textarea",label:"Qual é o “mastro do circo” da reestruturação — a coisa não-paralelizável que trava todo o resto?",hint:"Ex.: um modelo de dados/ontologia de conversas, um pipeline de ingestão, uma definição de métrica. Mesmo que chato."},
+      {id:"doors_list",type:"doors",label:"Liste as principais decisões da reestruturação e classifique cada uma como mão única ou mão dupla.",hint:"Ex.: mudar esquema do banco, trocar a métrica-chave, reescrever o front, expor via API/MCP."},
+      {id:"entrevistas",type:"textarea",label:"Com quantos usuários reais você já falou nesta reestruturação? Quais os próximos 5–7?",hint:"Se for 0, escreva aqui o plano pra chegar a 5 antes de construir mais."}
+    ],
+    pressure:{
+      id:"p_vale",
+      questions:[
+        "Você está burocratizando uma decisão de mão dupla (reversível) — ou improvisando numa de mão única (irreversível)?",
+        "Se o mastro é X e você está tocando Y “mais divertido”, por quê? O que trava enquanto Y não destrava nada?"
+      ]
+    }
+  },
+
+  {
+    id:"riscos",
+    nav:"5. O que pode dar errado?",
+    badge:"5",
+    title:"O que pode dar errado?",
+    sub:"Pergunta 5 das 5. Dogs not barking + obcecado pelo problema, flexível na solução.",
+    concept:{
+      tag:"Aula 2 · Risco, GTM e flexibilidade",
+      html:"<p><b>“Dogs not barking”</b>: preste atenção no que está <b>silencioso demais</b> — a pergunta que ninguém fez pode ser onde mora o risco.</p><p>Armadilha clássica: gastar meses no backend/arquitetura “bonita” antes de validar. A imobiliária australiana queimou US$1,2M em microserviços de altíssima escala e lançou com <b>zero usuário</b>. Antídoto: construa primeiro o <b>output (a tela final)</b> e mostre pro usuário; o backend dá mais trabalho e é onde você mais erra às cegas.</p><p>E a virada: um time percebeu que a plataforma inteira devia virar um <b>servidor MCP</b> e encontrar o usuário onde ele já está (e-mail/ferramenta), em vez de exigir login.</p>",
+      quote:"“Seja obcecado em resolver o problema, mas cuidado pra não se apaixonar por COMO você está resolvendo.”",
+      src:"Aula 2 — Imobiliária AUS · AOL · MCP · flexibilidade no discovery"
+    },
+    fields:[
+      {id:"dogs",type:"textarea",label:"Quais são os “cachorros que não latem” na sua reestruturação — o que está silencioso demais?",hint:"O risco que ninguém está levantando. Escreva o que te daria um frio na barriga se fosse verdade."},
+      {id:"backend_antes",type:"textarea",label:"Você está reconstruindo backend/arquitetura antes de validar o OUTPUT com o usuário? Onde?",hint:"Seja específico. Qual peça pesada você começaria só depois de validar a tela?"},
+      {id:"output_primeiro",type:"textarea",label:"Se você construísse só a TELA final (output) e mostrasse a um usuário amanhã, o que descobriria?",hint:"Descreva a tela mínima que valida a maior incerteza."},
+      {id:"apaixonado_solucao",type:"textarea",label:"Onde você está apaixonado pela SOLUÇÃO em vez do problema?",hint:"Precisa mesmo ser um dashboard/plataforma com login — ou poderia ser e-mail, alerta, MCP dentro da ferramenta que o usuário já usa?"}
+    ],
+    pressure:{
+      id:"p_riscos",
+      questions:[
+        "Qual é a decisão de MAIOR custo de erro irreversível aqui? O que te faria descobrir que ela está errada ANTES de gastar meses?",
+        "Se em 6 meses este projeto for “sinônimo de produto ruim” (como o AOL), qual terá sido a causa mais provável?"
+      ]
+    }
+  },
+
+  {
+    id:"prfaq",
+    nav:"6. PRFAQ (síntese)",
+    badge:"6",
+    title:"PRFAQ — a síntese",
+    sub:"Press Release + FAQ. Se você não consegue em texto, a ideia não está fechada.",
+    concept:{
+      tag:"Aula 2 · Working Backwards",
+      html:"<p>O PRFAQ conta a história do produto como um anúncio real (estilo release), texto corrido, sem imagens até o FAQ. <b>Working Backwards</b>: comece pela necessidade do cliente. Tem FAQ do cliente (por que importa pra ele) e FAQ interna (por que a empresa faz, visão, como alavanca o produto — e o <b>retorno pra empresa</b>, lacuna comum).</p><p>Você precisa <b>conquistar o leitor no 1º e 2º parágrafo</b> — senão ele vai checar o Slack. E o documento é naturalmente enviesado (quem escreve defende a ideia), então a cultura Amazon é “destruir o documento” em reunião até ele amadurecer. É um <b>documento vivo</b>, de baixo pra cima.</p>",
+      quote:"“Se você não consegue, em texto, me dizer qual é a sua ideia e conduzir uma narrativa, é porque a ideia não está fechada o suficiente.”",
+      src:"Aula 2 — PRFAQ / Obsessão pelo Cliente"
+    },
+    fields:[
+      {id:"pr_head",type:"text",label:"Manchete do release",hint:"Como um título de jornal. Concreta, sobre o benefício."},
+      {id:"pr_subhead",type:"text",label:"Sub-manchete (1 linha)",hint:"Complementa a manchete e mira o público."},
+      {id:"pr_p1",type:"textarea",label:"1º parágrafo — o problema + a promessa (conquiste o leitor AQUI)",hint:"Se o executivo largar aqui, você perdeu. Sem enrolação."},
+      {id:"pr_como",type:"textarea",label:"Como funciona (texto corrido, sem jargão)",hint:"A narrativa da solução — legível por quem não conhece o negócio."},
+      {id:"pr_cliente",type:"textarea",label:"Aspas de um cliente",hint:"O que o usuário diria, na voz dele, sobre o progresso que passou a fazer."},
+      {id:"pr_interna",type:"textarea",label:"Aspas interna (visão / por que a empresa faz isso)",hint:"Conecta com a estratégia do produto como um todo."},
+      {id:"pr_comecar",type:"textarea",label:"Como começar / disponibilidade",hint:"O próximo passo concreto (beta, quem entra primeiro)."},
+      {id:"faq_cliente",type:"textarea",label:"FAQ do CLIENTE — 3 a 5 perguntas que o cliente faria",hint:"Por que isso importa pra ele? Privacidade das conversas? Confiança no dado?"},
+      {id:"faq_interna",type:"textarea",label:"FAQ INTERNA — incluindo o RETORNO pra empresa (a lacuna do case)",hint:"Por que a empresa faz? Qual o ganho de negócio? Métricas de retorno, não só benefício do cliente."}
+    ],
+    pressure:{
+      id:"p_prfaq",
+      questions:[
+        "Releia só o 1º e o 2º parágrafo: um executivo continuaria lendo ou iria pro Slack?",
+        "Onde estão as métricas de retorno PARA A EMPRESA (não só o benefício do cliente)? “Working backwards” costuma esconder isso.",
+        "Que dado do seu texto alguém vai querer “destruir” perguntando “de onde você tirou isso?” — você tem a fonte?"
+      ]
+    }
+  },
+
+  {
+    id:"julgamento",
+    nav:"✓ Julgamento & call",
+    badge:"✓",
+    title:"Julgamento & preparo da call",
+    sub:"Recapitule o método e cheque se você está pronto pra apresentar.",
+    concept:{
+      tag:"Síntese das duas aulas",
+      html:"<p>Julgamento é percorrer, para qualquer projeto: <b>o problema existe? qual o JTBD? que valor cria (Kano)? vale a pena construir agora (mastro + porta)? o que pode dar errado?</b> — e sintetizar num PRFAQ que sobrevive ao “destruir o documento”.</p><p>Seja <b>obcecado pelo problema e flexível na solução</b>. E lembre a métrica: impacto real, não volume de output.</p>",
+      quote:"“A pessoa mais perigosa numa sala é alguém que consegue definir, construir e entregar — com velocidade e intensidade alta.”",
+      src:"Fase Definir — síntese"
+    },
+    fields:[
+      {id:"checklist",type:"checklist",label:"Checklist de prontidão para a call com o professor",
+        items:[
+          "Consigo declarar o problema em 1 frase, sem citar solução.",
+          "Tenho um episódio real (Mom Test) e um número da dor (quantificada).",
+          "Meu JTBD descreve progresso, não feature.",
+          "Sei o must-be que não posso quebrar (Kano).",
+          "Identifiquei o mastro do circo da reestruturação.",
+          "Classifiquei as decisões em mão única vs. mão dupla.",
+          "Falei (ou tenho plano pra falar) com 5–7 usuários.",
+          "Tenho o output/tela mínima pra validar antes do backend.",
+          "Meu PRFAQ conquista nos 2 primeiros parágrafos e mostra retorno pra empresa."
+        ]
+      },
+      {id:"uma_frase",type:"textarea",label:"Feche: em UMA frase, qual é a melhor decisão possível agora, com a informação que você tem?",hint:"A promessa do curso. Não a decisão ótima de 10 anos — a melhor possível hoje."},
+      {id:"pergunta_prof",type:"textarea",label:"Qual a MELHOR pergunta que você vai levar pro professor? (qualidade da pergunta > ter a resposta)",hint:"“Quanto mais estratégico você fica, mais importa fazer perguntas de alta qualidade.”"}
+    ]
+  }
+];
+
+/* ---------------------------------------------------------------
+   ESTADO / PERSISTÊNCIA
+--------------------------------------------------------------- */
+var STORAGE_KEY = "pe-definir-estudio-v1";
+var state = { answers:{}, current:0 };
+var host = document.getElementById("stationHost");
+var navlist = document.getElementById("navlist");
+
+function loadState(){
+  try{
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){ var p = JSON.parse(raw); if(p && p.answers){ state.answers = p.answers; state.current = p.current||0; } }
+  }catch(e){}
+  // pré-preencher defaults só se ainda não houver nada salvo
+  STATIONS.forEach(function(st){
+    (st.fields||[]).forEach(function(f){
+      if(f.value!=null && state.answers[f.id]==null){ state.answers[f.id]=f.value; }
+    });
+  });
+}
+var saveTimer=null;
+function saveState(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); flashSaved(); }
+  catch(e){ document.getElementById("saveMsg").textContent="Não foi possível salvar no navegador (use Exportar)."; }
+}
+function flashSaved(){
+  var d=document.getElementById("saveDot"); var m=document.getElementById("saveMsg");
+  if(!d) return; d.style.background="var(--accent)"; m.textContent="Salvando…";
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(function(){ d.style.background="var(--green)"; m.textContent="Salvo automaticamente no navegador"; },350);
+}
+function onChange(){ updateProgress(); clearTimeout(saveTimer); saveTimer=setTimeout(saveState,250); }
+
+/* ---------------------------------------------------------------
+   HELPERS
+--------------------------------------------------------------- */
+function el(tag,cls,html){ var e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e; }
+function val(id){ return state.answers[id]; }
+function esc(s){ return (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function fieldHasContent(f){
+  var v=state.answers[f.id];
+  if(f.type==="jtbd"||f.type==="kano"||f.type==="doors"){
+    if(!Array.isArray(v)) return false;
+    return v.some(function(x){ return x && Object.keys(x).some(function(k){ return String(x[k]||"").trim()!==""; }); });
+  }
+  if(f.type==="checklist"){ return Array.isArray(v) && v.length>0; }
+  return v!=null && String(v).trim()!=="";
+}
+function stationCounts(st){
+  var fields=(st.fields||[]).filter(function(f){ return f.type!=="checklist"; });
+  var total=fields.length, done=0;
+  fields.forEach(function(f){ if(fieldHasContent(f)) done++; });
+  return {total:total,done:done};
+}
+
+/* ---------------------------------------------------------------
+   RENDER NAV
+--------------------------------------------------------------- */
+function buildNav(){
+  navlist.innerHTML="";
+  STATIONS.forEach(function(st,i){
+    var item=el("div","navitem");
+    item.dataset.index=i;
+    var dot=el("span","dot", esc(st.badge));
+    var lab=el("span","navtext", esc(st.nav));
+    item.appendChild(dot); item.appendChild(lab);
+    item.addEventListener("click",function(){ go(i); });
+    navlist.appendChild(item);
+  });
+}
+function updateProgress(){
+  var totalAll=0, doneAll=0;
+  STATIONS.forEach(function(st,i){
+    var c=stationCounts(st); totalAll+=c.total; doneAll+=c.done;
+    var item=navlist.children[i]; if(!item) return;
+    item.classList.toggle("active", i===state.current);
+    var comp = c.total>0 ? (c.done>=c.total ? "full" : (c.done>0 ? "part" : "none")) : "none";
+    item.dataset.complete=comp;
+  });
+  var pct = totalAll>0 ? Math.round(doneAll/totalAll*100) : 0;
+  document.getElementById("barFill").style.width=pct+"%";
+  document.getElementById("pctText").textContent=pct+"%";
+}
+
+/* ---------------------------------------------------------------
+   RENDER WIDGETS
+--------------------------------------------------------------- */
+function renderTextField(f){
+  var wrap=el("div","field");
+  wrap.appendChild(el("label",null,esc(f.label)));
+  if(f.hint) wrap.appendChild(el("div","hint",esc(f.hint)));
+  var input = f.type==="text" ? el("input") : el("textarea");
+  if(f.type==="text") input.type="text";
+  if(f.placeholder) input.placeholder=f.placeholder;
+  input.value = val(f.id)!=null ? val(f.id) : "";
+  input.addEventListener("input",function(){ state.answers[f.id]=input.value; onChange(); });
+  wrap.appendChild(input);
+  return wrap;
+}
+
+function renderJTBD(f){
+  var wrap=el("div","field");
+  wrap.appendChild(el("label",null,esc(f.label)));
+  if(f.hint) wrap.appendChild(el("div","hint",esc(f.hint)));
+  if(!Array.isArray(val(f.id))) state.answers[f.id]=[{quando:"",ajude:"",paraque:"",sem:""}];
+  var listHost=el("div"); wrap.appendChild(listHost);
+
+  function draw(){
+    listHost.innerHTML="";
+    var arr=state.answers[f.id];
+    arr.forEach(function(entry,idx){
+      var box=el("div","jtbd-entry");
+      var rows=[["quando","Quando…"],["ajude","me ajude a…"],["paraque","para que eu…"],["sem","sem…"]];
+      rows.forEach(function(r){
+        var row=el("div","jtbd-row");
+        row.appendChild(el("div","key",r[1]));
+        var inp=el("input"); inp.type="text"; inp.value=entry[r[0]]||"";
+        inp.addEventListener("input",function(){ entry[r[0]]=inp.value; updatePreview(); onChange(); });
+        row.appendChild(inp);
+        box.appendChild(row);
+      });
+      var prev=el("div","jtbd-preview");
+      box.appendChild(prev);
+      function updatePreview(){
+        prev.innerHTML = "<b>Quando</b> "+esc(entry.quando||"…")+", <b>me ajude a</b> "+esc(entry.ajude||"…")+", <b>para que eu</b> "+esc(entry.paraque||"…")+", <b>sem</b> "+esc(entry.sem||"…")+".";
+      }
+      updatePreview();
+      var act=el("div","row-actions");
+      var del=el("button","btn mini danger","Remover");
+      del.addEventListener("click",function(){ arr.splice(idx,1); if(arr.length===0)arr.push({quando:"",ajude:"",paraque:"",sem:""}); draw(); onChange(); });
+      act.appendChild(del); box.appendChild(act);
+      listHost.appendChild(box);
+    });
+  }
+  draw();
+  var add=el("button","btn mini rep-add","+ Adicionar JTBD");
+  add.addEventListener("click",function(){ state.answers[f.id].push({quando:"",ajude:"",paraque:"",sem:""}); draw(); onChange(); });
+  wrap.appendChild(add);
+  return wrap;
+}
+
+function renderKano(f){
+  var wrap=el("div","field");
+  wrap.appendChild(el("label",null,esc(f.label)));
+  if(f.hint) wrap.appendChild(el("div","hint",esc(f.hint)));
+  if(!Array.isArray(val(f.id))) state.answers[f.id]=[];
+  var listHost=el("div"); wrap.appendChild(listHost);
+  var TYPES=[["basico","Básico (must-be)"],["performance","Performance"],["delighter","Delighter"]];
+
+  function draw(){
+    listHost.innerHTML="";
+    state.answers[f.id].forEach(function(entry,idx){
+      var box=el("div","rep-entry");
+      var top=el("div","rep-top");
+      var inp=el("input"); inp.type="text"; inp.placeholder="capacidade / funcionalidade"; inp.value=entry.item||"";
+      inp.addEventListener("input",function(){ entry.item=inp.value; onChange(); });
+      var sel=el("select");
+      TYPES.forEach(function(t){ var o=el("option",null,t[1]); o.value=t[0]; if(entry.tipo===t[0])o.selected=true; sel.appendChild(o); });
+      if(!entry.tipo) entry.tipo="basico";
+      var badge=el("span","badge b-"+entry.tipo, sel.options[sel.selectedIndex].text);
+      sel.addEventListener("change",function(){ entry.tipo=sel.value; badge.className="badge b-"+entry.tipo; badge.textContent=sel.options[sel.selectedIndex].text; onChange(); });
+      var del=el("button","btn mini danger","✕");
+      del.addEventListener("click",function(){ state.answers[f.id].splice(idx,1); draw(); onChange(); });
+      top.appendChild(inp); top.appendChild(sel); top.appendChild(badge); top.appendChild(del);
+      box.appendChild(top);
+      var nota=el("input"); nota.type="text"; nota.placeholder="por quê? (opcional)"; nota.value=entry.nota||""; nota.style.marginTop="8px";
+      nota.addEventListener("input",function(){ entry.nota=nota.value; onChange(); });
+      box.appendChild(nota);
+      listHost.appendChild(box);
+    });
+  }
+  draw();
+  var add=el("button","btn mini rep-add","+ Adicionar capacidade");
+  add.addEventListener("click",function(){ state.answers[f.id].push({item:"",tipo:"basico",nota:""}); draw(); onChange(); });
+  wrap.appendChild(add);
+  return wrap;
+}
+
+function renderDoors(f){
+  var wrap=el("div","field");
+  wrap.appendChild(el("label",null,esc(f.label)));
+  if(f.hint) wrap.appendChild(el("div","hint",esc(f.hint)));
+  if(!Array.isArray(val(f.id))) state.answers[f.id]=[];
+  var listHost=el("div"); wrap.appendChild(listHost);
+  var TYPES=[["dupla","Mão dupla (reversível)"],["unica","Mão única (irreversível)"]];
+
+  function draw(){
+    listHost.innerHTML="";
+    state.answers[f.id].forEach(function(entry,idx){
+      var box=el("div","rep-entry");
+      var top=el("div","rep-top");
+      var inp=el("input"); inp.type="text"; inp.placeholder="decisão da reestruturação"; inp.value=entry.decisao||"";
+      inp.addEventListener("input",function(){ entry.decisao=inp.value; onChange(); });
+      var sel=el("select");
+      TYPES.forEach(function(t){ var o=el("option",null,t[1]); o.value=t[0]; if(entry.tipo===t[0])o.selected=true; sel.appendChild(o); });
+      if(!entry.tipo) entry.tipo="dupla";
+      var badge=el("span","badge b-"+entry.tipo, entry.tipo==="unica"?"mão única":"mão dupla");
+      sel.addEventListener("change",function(){ entry.tipo=sel.value; badge.className="badge b-"+entry.tipo; badge.textContent=(entry.tipo==="unica"?"mão única":"mão dupla"); onChange(); });
+      var del=el("button","btn mini danger","✕");
+      del.addEventListener("click",function(){ state.answers[f.id].splice(idx,1); draw(); onChange(); });
+      top.appendChild(inp); top.appendChild(sel); top.appendChild(badge); top.appendChild(del);
+      box.appendChild(top);
+      var nota=el("input"); nota.type="text"; nota.placeholder="custo de reverter / cuidado (opcional)"; nota.value=entry.nota||""; nota.style.marginTop="8px";
+      nota.addEventListener("input",function(){ entry.nota=nota.value; onChange(); });
+      box.appendChild(nota);
+      listHost.appendChild(box);
+    });
+  }
+  draw();
+  var add=el("button","btn mini rep-add","+ Adicionar decisão");
+  add.addEventListener("click",function(){ state.answers[f.id].push({decisao:"",tipo:"dupla",nota:""}); draw(); onChange(); });
+  wrap.appendChild(add);
+  return wrap;
+}
+
+function renderChecklist(f){
+  var wrap=el("div","field");
+  wrap.appendChild(el("label",null,esc(f.label)));
+  if(!Array.isArray(val(f.id))) state.answers[f.id]=[];
+  var checked=state.answers[f.id];
+  var ul=el("ul","checklist");
+  f.items.forEach(function(txt,idx){
+    var li=el("li");
+    var cb=el("input"); cb.type="checkbox"; cb.checked=checked.indexOf(idx)>-1;
+    cb.addEventListener("change",function(){
+      var pos=checked.indexOf(idx);
+      if(cb.checked && pos<0) checked.push(idx);
+      if(!cb.checked && pos>-1) checked.splice(pos,1);
+      onChange();
+    });
+    li.appendChild(cb); li.appendChild(el("span",null,esc(txt)));
+    ul.appendChild(li);
+  });
+  wrap.appendChild(ul);
+  return wrap;
+}
+
+function renderPressure(p){
+  var box=el("div","pressure");
+  box.appendChild(el("div","tag","⚔ Modo Office Hour — defenda-se"));
+  var ul=el("ul");
+  p.questions.forEach(function(q){ ul.appendChild(el("li",null,esc(q))); });
+  box.appendChild(ul);
+  var ta=el("textarea"); ta.placeholder="Sua defesa / resposta (é aqui que você é forçado a explicar)…";
+  ta.value = val(p.id)!=null ? val(p.id) : "";
+  ta.addEventListener("input",function(){ state.answers[p.id]=ta.value; onChange(); });
+  box.appendChild(ta);
+  return box;
+}
+
+/* ---------------------------------------------------------------
+   RENDER STATION
+--------------------------------------------------------------- */
+function renderStation(i){
+  var st=STATIONS[i];
+  host.innerHTML="";
+  var card=el("div","station");
+
+  var head=el("div","st-head");
+  head.appendChild(el("div","st-badge",esc(st.badge)));
+  var htxt=el("div");
+  htxt.appendChild(el("h2","st-title",esc(st.title)));
+  htxt.appendChild(el("div","st-sub",esc(st.sub)));
+  head.appendChild(htxt);
+  card.appendChild(head);
+
+  if(st.concept){
+    var c=el("div","concept");
+    c.appendChild(el("span","tag",esc(st.concept.tag)));
+    c.appendChild(el("div",null,st.concept.html));
+    if(st.concept.quote) c.appendChild(el("div","quote",esc(st.concept.quote)));
+    if(st.concept.src) c.appendChild(el("div","src","— "+esc(st.concept.src)));
+    card.appendChild(c);
+  }
+
+  (st.fields||[]).forEach(function(f){
+    if(f.type==="jtbd") card.appendChild(renderJTBD(f));
+    else if(f.type==="kano") card.appendChild(renderKano(f));
+    else if(f.type==="doors") card.appendChild(renderDoors(f));
+    else if(f.type==="checklist") card.appendChild(renderChecklist(f));
+    else card.appendChild(renderTextField(f));
+  });
+
+  if(st.pressure) card.appendChild(renderPressure(st.pressure));
+
+  // toolbar na última estação
+  if(i===STATIONS.length-1){
+    var tb=el("div","toolbar");
+    tb.appendChild(mkBtn("⬇︎ Exportar Markdown","btn primary",exportMarkdown));
+    tb.appendChild(mkBtn("⬇︎ Exportar JSON","btn",exportJSON));
+    tb.appendChild(mkBtn("⬆︎ Importar JSON","btn",importJSON));
+    tb.appendChild(mkBtn("🖨 Imprimir / PDF","btn",printAll));
+    tb.appendChild(mkBtn("↺ Limpar tudo","btn danger",resetAll));
+    card.appendChild(tb);
+  }
+
+  host.appendChild(card);
+  // botões de navegação
+  document.getElementById("btnPrev").style.visibility = i===0 ? "hidden":"visible";
+  document.getElementById("btnNext").textContent = i===STATIONS.length-1 ? "Concluir ✓" : "Próxima estação →";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function mkBtn(txt,cls,fn){ var b=el("button",cls,txt); b.addEventListener("click",fn); return b; }
+
+function go(i){
+  if(i<0||i>=STATIONS.length) return;
+  state.current=i; renderStation(i); updateProgress(); saveState();
+}
+
+/* ---------------------------------------------------------------
+   EXPORT / IMPORT / PRINT / RESET
+--------------------------------------------------------------- */
+function buildMarkdown(){
+  var out=[];
+  out.push("# Fase Definir — Definição do projeto");
+  out.push("");
+  out.push("_Projeto: analytics de conversas de plataforma de IA B2B (em reestruturação). Gerado no Estúdio de Definição — método MasterClass Product Engineer (Aula 1 e 2)._");
+  out.push("");
+  STATIONS.forEach(function(st){
+    out.push("## "+st.badge+". "+st.title);
+    (st.fields||[]).forEach(function(f){
+      if(f.type==="checklist"){
+        out.push("");
+        out.push("**"+f.label+"**");
+        var checked=state.answers[f.id]||[];
+        f.items.forEach(function(txt,idx){ out.push("- ["+(checked.indexOf(idx)>-1?"x":" ")+"] "+txt); });
+        return;
+      }
+      out.push("");
+      out.push("**"+f.label+"**");
+      var v=state.answers[f.id];
+      if(f.type==="jtbd"){
+        if(Array.isArray(v)&&v.length){ v.forEach(function(e){ if((e.quando||e.ajude||e.paraque||e.sem)) out.push("- Quando "+(e.quando||"…")+", me ajude a "+(e.ajude||"…")+", para que eu "+(e.paraque||"…")+", sem "+(e.sem||"…")+"."); }); }
+        else out.push("_(vazio)_");
+      } else if(f.type==="kano"){
+        if(Array.isArray(v)&&v.length){ v.forEach(function(e){ if(e.item) out.push("- ["+kanoLabel(e.tipo)+"] "+e.item+(e.nota?" — "+e.nota:"")); }); }
+        else out.push("_(vazio)_");
+      } else if(f.type==="doors"){
+        if(Array.isArray(v)&&v.length){ v.forEach(function(e){ if(e.decisao) out.push("- ["+(e.tipo==="unica"?"MÃO ÚNICA":"mão dupla")+"] "+e.decisao+(e.nota?" — "+e.nota:"")); }); }
+        else out.push("_(vazio)_");
+      } else {
+        out.push(v && String(v).trim() ? String(v) : "_(vazio)_");
+      }
+    });
+    if(st.pressure){
+      out.push("");
+      out.push("**Office Hour — defesa**");
+      st.pressure.questions.forEach(function(q){ out.push("> "+q); });
+      var pv=state.answers[st.pressure.id];
+      out.push(pv && String(pv).trim() ? String(pv) : "_(sem resposta)_");
+    }
+    out.push("");
+  });
+  return out.join("\n");
+}
+function kanoLabel(t){ return t==="performance"?"Performance":(t==="delighter"?"Delighter":"Básico"); }
+
+function download(filename,text,mime){
+  var blob=new Blob([text],{type:mime||"text/plain;charset=utf-8"});
+  var a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){ URL.revokeObjectURL(a.href); },1500);
+}
+function stamp(){ var d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function exportMarkdown(){ download("definir-projeto_"+stamp()+".md", buildMarkdown(), "text/markdown;charset=utf-8"); }
+function exportJSON(){ download("definir-projeto_"+stamp()+".json", JSON.stringify(state,null,2), "application/json"); }
+function importJSON(){
+  var inp=document.createElement("input"); inp.type="file"; inp.accept="application/json,.json";
+  inp.addEventListener("change",function(){
+    var file=inp.files[0]; if(!file)return;
+    var r=new FileReader();
+    r.onload=function(){ try{ var p=JSON.parse(r.result); if(p&&p.answers){ state.answers=p.answers; state.current=p.current||0; saveState(); buildNav(); renderStation(state.current); updateProgress(); alert("Importado com sucesso."); } else alert("Arquivo inválido."); }catch(e){ alert("Não consegui ler o JSON."); } };
+    r.readAsText(file);
+  });
+  inp.click();
+}
+function printAll(){
+  var pa=document.getElementById("printArea");
+  var html=["<h1>Fase Definir — Definição do projeto</h1>"];
+  STATIONS.forEach(function(st){
+    html.push("<h2>"+st.badge+". "+esc(st.title)+"</h2>");
+    (st.fields||[]).forEach(function(f){
+      if(f.type==="checklist"){
+        html.push("<div class='q'>"+esc(f.label)+"</div>");
+        var checked=state.answers[f.id]||[];
+        f.items.forEach(function(txt,idx){ html.push("<div class='a'>"+(checked.indexOf(idx)>-1?"☑":"☐")+" "+esc(txt)+"</div>"); });
+        return;
+      }
+      html.push("<div class='q'>"+esc(f.label)+"</div>");
+      var v=state.answers[f.id];
+      if(f.type==="jtbd"&&Array.isArray(v)){ v.forEach(function(e){ if(e.quando||e.ajude||e.paraque||e.sem) html.push("<div class='a'>Quando "+esc(e.quando)+", me ajude a "+esc(e.ajude)+", para que eu "+esc(e.paraque)+", sem "+esc(e.sem)+".</div>"); }); }
+      else if(f.type==="kano"&&Array.isArray(v)){ v.forEach(function(e){ if(e.item) html.push("<div class='a'>["+kanoLabel(e.tipo)+"] "+esc(e.item)+(e.nota?" — "+esc(e.nota):"")+"</div>"); }); }
+      else if(f.type==="doors"&&Array.isArray(v)){ v.forEach(function(e){ if(e.decisao) html.push("<div class='a'>["+(e.tipo==="unica"?"MÃO ÚNICA":"mão dupla")+"] "+esc(e.decisao)+(e.nota?" — "+esc(e.nota):"")+"</div>"); }); }
+      else html.push("<div class='a'>"+esc(v||"—")+"</div>");
+    });
+    if(st.pressure){
+      st.pressure.questions.forEach(function(q){ html.push("<div class='q'>⚔ "+esc(q)+"</div>"); });
+      html.push("<div class='a'>"+esc(state.answers[st.pressure.id]||"—")+"</div>");
+    }
+  });
+  pa.innerHTML=html.join("");
+  window.print();
+}
+function resetAll(){
+  if(!confirm("Isso apaga todas as suas respostas salvas neste navegador. Exporte antes se quiser guardar. Continuar?")) return;
+  try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+  state={answers:{},current:0};
+  STATIONS.forEach(function(st){ (st.fields||[]).forEach(function(f){ if(f.value!=null) state.answers[f.id]=f.value; }); });
+  buildNav(); renderStation(0); updateProgress();
+}
+
+/* ---------------------------------------------------------------
+   INIT
+--------------------------------------------------------------- */
+document.getElementById("btnPrev").addEventListener("click",function(){ go(state.current-1); });
+document.getElementById("btnNext").addEventListener("click",function(){ if(state.current<STATIONS.length-1) go(state.current+1); else window.scrollTo({top:0,behavior:"smooth"}); });
+document.getElementById("btnExportMd").addEventListener("click",exportMarkdown);
+
+loadState();
+buildNav();
+renderStation(state.current);
+updateProgress();
+</script>
+</body>
+</html>
